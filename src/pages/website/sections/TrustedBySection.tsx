@@ -22,7 +22,7 @@ export function TrustedBySection() {
     <section className="bg-black px-5 py-24 sm:px-8 sm:py-28 lg:px-12">
       <div className="mx-auto w-full max-w-[1560px]">
         <p className="text-center text-sm font-light uppercase text-white/60 sm:text-sm">
-          Trusted by 150+ enterprises
+          Official Sponsors & Partners
         </p>
 
         <div className="mt-20 grid grid-cols-2 items-center gap-x-8 gap-y-14 sm:grid-cols-3 sm:gap-x-10 lg:grid-cols-5 lg:gap-x-12 lg:gap-y-18">
