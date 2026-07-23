@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /administrator/
+
+Sitemap: https://pxdl.pro/sitemap.xml
