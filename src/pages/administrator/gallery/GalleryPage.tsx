@@ -640,7 +640,7 @@ export function GalleryPage() {
                 htmlFor="gallery-image-upload"
                 aria-disabled={!selectedFolder || isUploading}
                 className={cn(
-                  "inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2.5 text-sm font-normal transition-all hover:bg-muted",
+                  "inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 text-sm font-normal text-zinc-950 shadow-xs transition-all hover:bg-zinc-100",
                   !selectedFolder || isUploading
                     ? "pointer-events-none cursor-not-allowed opacity-50"
                     : "cursor-pointer",
@@ -679,17 +679,17 @@ export function GalleryPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="rounded-lg border border-dashed bg-muted/20 p-4">
+                <div className="rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-4">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-sm font-medium">
                         Selected folder: {selectedFolder.title}
                       </p>
-                      <p className="mt-1 text-xs text-muted-foreground">
+                      <p className="mt-1 text-xs text-zinc-500">
                         JPG, PNG, WEBP, or GIF. Maximum 16MB per image.
                       </p>
                       {uploadState && (
-                        <p className="mt-2 text-xs text-muted-foreground">
+                        <p className="mt-2 text-xs text-zinc-500">
                           {uploadState.currentFile
                             ? `Uploading ${uploadState.currentFile}`
                             : "Finalizing upload"}{" "}
@@ -701,7 +701,7 @@ export function GalleryPage() {
                       htmlFor="gallery-image-upload"
                       aria-disabled={isUploading}
                       className={cn(
-                        "inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#07503d] px-2.5 text-sm font-normal text-white transition-all hover:bg-[#064433]",
+                        "inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#07503d] px-3 text-sm font-normal text-white shadow-xs transition-all hover:bg-[#064433]",
                         isUploading
                           ? "pointer-events-none cursor-not-allowed opacity-50"
                           : "cursor-pointer",
@@ -716,7 +716,7 @@ export function GalleryPage() {
                     </label>
                   </div>
                   {uploadState && (
-                    <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
+                    <div className="mt-4 h-2 overflow-hidden rounded-full bg-zinc-200">
                       <div
                         className="h-full rounded-full bg-[#07503d] transition-all"
                         style={{

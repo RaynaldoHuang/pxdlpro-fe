@@ -5,11 +5,11 @@ import {
   Loader2,
   Plus,
   Trash2,
-  Upload,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
+import { AdminUploadField } from "@/components/common/AdminUploadField";
 import { ContentWrapper } from "@/components/common/ContentWrapper";
 import { TablePagination } from "@/components/common/TablePagination";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -57,6 +57,7 @@ import {
   type PlayerPayload,
   type RankingCategoryValue,
 } from "@/lib/players";
+import { uploadErrorMessage } from "@/lib/uploadErrors";
 
 type PlayerForm = {
   points: string;
@@ -505,8 +506,8 @@ function PlayerDialog({
         image_url: media.url,
       }));
       toast.success("Image berhasil diupload.");
-    } catch {
-      toast.error("Gagal upload image.");
+    } catch (error) {
+      toast.error(uploadErrorMessage(error, "Gagal upload image."));
     } finally {
       setUploadingFileName(null);
     }
@@ -524,54 +525,16 @@ function PlayerDialog({
           </DialogHeader>
 
           <div className="grid gap-4">
-            <div className="grid gap-4 sm:grid-cols-[112px_1fr] sm:items-start">
-              <div className="flex aspect-square items-center justify-center overflow-hidden rounded-lg border bg-muted/30">
-                {form.image_url ? (
-                  <img
-                    src={form.image_url}
-                    alt={form.name || "Player preview"}
-                    className="size-full object-contain"
-                  />
-                ) : (
-                  <ImageIcon className="size-8 text-muted-foreground" />
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="player-image-upload">Upload image</Label>
-                <div className="flex flex-col gap-2 rounded-lg border bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="min-w-0 truncate text-xs text-muted-foreground">
-                    {uploadingFileName
-                      ? `Uploading ${uploadingFileName}...`
-                      : "JPG, PNG, WEBP, GIF. Max 12MB."}
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="relative overflow-hidden"
-                    disabled={Boolean(uploadingFileName)}
-                  >
-                    {uploadingFileName ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Upload className="size-4" />
-                    )}
-                    Choose file
-                    <input
-                      id="player-image-upload"
-                      type="file"
-                      className="absolute inset-0 cursor-pointer opacity-0 disabled:cursor-not-allowed"
-                      accept="image/jpeg,image/png,image/webp,image/gif"
-                      disabled={Boolean(uploadingFileName)}
-                      onChange={(event) => {
-                        void handleImageUpload(event.target.files?.[0]);
-                        event.target.value = "";
-                      }}
-                    />
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <AdminUploadField
+              id="player-image-upload"
+              label="Upload image"
+              helperText="JPG, PNG, WEBP, GIF. Max 12MB."
+              uploadingFileName={uploadingFileName}
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              previewUrl={form.image_url}
+              previewAlt={form.name || "Player preview"}
+              onFileChange={(file) => void handleImageUpload(file)}
+            />
 
             <div className="grid gap-4 sm:grid-cols-[140px_1fr]">
               <div className="space-y-2">

@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import {
   ArrowDown,
   ArrowUp,
@@ -9,11 +8,11 @@ import {
   Loader2,
   Plus,
   Trash2,
-  Upload,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
+import { AdminUploadField } from "@/components/common/AdminUploadField";
 import { ContentWrapper } from "@/components/common/ContentWrapper";
 import { TablePagination } from "@/components/common/TablePagination";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -54,20 +53,13 @@ import {
   type TrustedBrand,
   type TrustedBrandPayload,
 } from "@/lib/trustedBrands";
+import { uploadErrorMessage } from "@/lib/uploadErrors";
 
 type TrustedBrandForm = {
   name: string;
   logo_url: string;
   website_url: string;
   is_active: boolean;
-};
-
-type UploadErrorResponse = {
-  message?: string;
-  errors?: {
-    file?: string[];
-  };
-  limits?: Record<string, string>;
 };
 
 const emptyForm: TrustedBrandForm = {
@@ -499,21 +491,7 @@ function TrustedBrandDialog({
       }));
       toast.success("Logo berhasil diupload.");
     } catch (error) {
-      if (axios.isAxiosError<UploadErrorResponse>(error)) {
-        const fileError = error.response?.data.errors?.file?.[0];
-        const serverMessage = error.response?.data.message;
-        const limits = error.response?.data.limits;
-        const limitText = limits
-          ? ` Server: upload ${limits.upload_max_filesize}, post ${limits.post_max_size}.`
-          : "";
-
-        toast.error(
-          `${fileError ?? serverMessage ?? "Gagal upload logo."}${limitText}`,
-        );
-        return;
-      }
-
-      toast.error("Gagal upload logo.");
+      toast.error(uploadErrorMessage(error, "Gagal upload logo."));
     } finally {
       setUploadingFileName(null);
     }
@@ -531,54 +509,16 @@ function TrustedBrandDialog({
           </DialogHeader>
 
           <div className="grid gap-4">
-            <div className="grid gap-4 sm:grid-cols-[112px_1fr] sm:items-start">
-              <div className="flex aspect-square items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-                {form.logo_url ? (
-                  <img
-                    src={form.logo_url}
-                    alt={form.name || "Sponsor logo preview"}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                ) : (
-                  <ImageIcon className="size-8 text-zinc-300" />
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="brand-logo-upload">Upload logo</Label>
-                <div className="flex flex-col gap-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="min-w-0 truncate text-xs text-zinc-500">
-                    {uploadingFileName
-                      ? `Uploading ${uploadingFileName}...`
-                      : "JPG, PNG, WEBP, GIF, SVG. Max 8MB."}
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="relative overflow-hidden"
-                    disabled={Boolean(uploadingFileName)}
-                  >
-                    {uploadingFileName ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Upload className="size-4" />
-                    )}
-                    Choose file
-                    <input
-                      id="brand-logo-upload"
-                      type="file"
-                      className="absolute inset-0 cursor-pointer opacity-0 disabled:cursor-not-allowed"
-                      accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
-                      disabled={Boolean(uploadingFileName)}
-                      onChange={(event) => {
-                        void handleLogoUpload(event.target.files?.[0]);
-                        event.target.value = "";
-                      }}
-                    />
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <AdminUploadField
+              id="brand-logo-upload"
+              label="Upload logo"
+              helperText="JPG, PNG, WEBP, GIF, SVG. Max 8MB."
+              uploadingFileName={uploadingFileName}
+              accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+              previewUrl={form.logo_url}
+              previewAlt={form.name || "Sponsor logo preview"}
+              onFileChange={(file) => void handleLogoUpload(file)}
+            />
 
             <div className="space-y-2">
               <Label htmlFor="brand-name">Sponsor name</Label>

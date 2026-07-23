@@ -14,7 +14,6 @@ import {
   Plus,
   Quote,
   Trash2,
-  Upload,
 } from "lucide-react";
 import {
   useEffect,
@@ -25,6 +24,7 @@ import {
 } from "react";
 import { toast } from "sonner";
 
+import { AdminUploadField } from "@/components/common/AdminUploadField";
 import { ContentWrapper } from "@/components/common/ContentWrapper";
 import { TablePagination } from "@/components/common/TablePagination";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -61,6 +61,7 @@ import {
   type Article,
   type ArticlePayload,
 } from "@/lib/articles";
+import { uploadErrorMessage } from "@/lib/uploadErrors";
 
 type ArticleForm = {
   title: string;
@@ -630,8 +631,8 @@ function ArticleDialog({
         image_url: media.url,
       }));
       toast.success("Image berhasil diupload.");
-    } catch {
-      toast.error("Gagal upload image.");
+    } catch (error) {
+      toast.error(uploadErrorMessage(error, "Gagal upload image."));
     } finally {
       setUploadingFileName(null);
     }
@@ -649,54 +650,17 @@ function ArticleDialog({
           </DialogHeader>
 
           <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto px-4 py-4 sm:px-6">
-            <div className="grid gap-4 sm:grid-cols-[140px_1fr] sm:items-start">
-              <div className="flex aspect-[1.25] items-center justify-center overflow-hidden rounded-lg border bg-muted/30">
-                {form.image_url ? (
-                  <img
-                    src={form.image_url}
-                    alt={form.title || "Article preview"}
-                    className="size-full object-cover"
-                  />
-                ) : (
-                  <ImageIcon className="size-8 text-muted-foreground" />
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="article-image-upload">Upload image</Label>
-                <div className="flex flex-col gap-2 rounded-lg border bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="min-w-0 truncate text-xs text-muted-foreground">
-                    {uploadingFileName
-                      ? `Uploading ${uploadingFileName}...`
-                      : "JPG, PNG, WEBP, GIF. Max 12MB."}
-                  </p>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="relative overflow-hidden"
-                    disabled={Boolean(uploadingFileName)}
-                  >
-                    {uploadingFileName ? (
-                      <Loader2 className="size-4 animate-spin" />
-                    ) : (
-                      <Upload className="size-4" />
-                    )}
-                    Choose file
-                    <input
-                      id="article-image-upload"
-                      type="file"
-                      className="absolute inset-0 cursor-pointer opacity-0 disabled:cursor-not-allowed"
-                      accept="image/jpeg,image/png,image/webp,image/gif"
-                      disabled={Boolean(uploadingFileName)}
-                      onChange={(event) => {
-                        void handleImageUpload(event.target.files?.[0]);
-                        event.target.value = "";
-                      }}
-                    />
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <AdminUploadField
+              id="article-image-upload"
+              label="Upload image"
+              helperText="JPG, PNG, WEBP, GIF. Max 12MB."
+              uploadingFileName={uploadingFileName}
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              previewUrl={form.image_url}
+              previewAlt={form.title || "Article preview"}
+              previewClassName="aspect-[1.25] sm:aspect-square sm:[&_img]:object-cover"
+              onFileChange={(file) => void handleImageUpload(file)}
+            />
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">

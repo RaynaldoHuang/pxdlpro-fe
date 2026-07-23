@@ -7,11 +7,11 @@ import {
   Loader2,
   Plus,
   Trash2,
-  Upload,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { toast } from "sonner";
 
+import { AdminUploadField } from "@/components/common/AdminUploadField";
 import { ContentWrapper } from "@/components/common/ContentWrapper";
 import { TablePagination } from "@/components/common/TablePagination";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -60,6 +60,7 @@ import {
   type HeroSlide,
   type HeroSlidePayload,
 } from "@/lib/heroSlides";
+import { uploadErrorMessage } from "@/lib/uploadErrors";
 
 type HeroSlideForm = {
   eyebrow: string;
@@ -567,9 +568,7 @@ function HeroSlideDialog({
       }));
       toast.success("Media berhasil diupload.");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Gagal upload media.",
-      );
+      toast.error(uploadErrorMessage(error, "Gagal upload media."));
     } finally {
       setUploadingFileName(null);
     }
@@ -656,41 +655,21 @@ function HeroSlideDialog({
               />
             </div>
 
-            <div className="space-y-2 lg:col-span-2">
-              <Label htmlFor="hero-media-upload">Upload local media</Label>
-              <div className="flex flex-col gap-2 rounded-lg border bg-muted/20 p-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="min-w-0 text-sm text-muted-foreground">
-                  <p className="truncate text-xs">
-                    {uploadingFileName
-                      ? `Uploading ${uploadingFileName}...`
-                      : "JPG, PNG, WEBP, GIF, MP4, WEBM, MOV, M4V. Max 80MB."}
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="relative overflow-hidden"
-                  disabled={Boolean(uploadingFileName)}
-                >
-                  {uploadingFileName ? (
-                    <Loader2 className="size-4 animate-spin" />
-                  ) : (
-                    <Upload className="size-4" />
-                  )}
-                  Choose file
-                  <input
-                    id="hero-media-upload"
-                    type="file"
-                    className="absolute inset-0 cursor-pointer opacity-0 disabled:cursor-not-allowed"
-                    accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,video/x-m4v"
-                    disabled={Boolean(uploadingFileName)}
-                    onChange={(event) => {
-                      void handleFileUpload(event.target.files?.[0]);
-                      event.target.value = "";
-                    }}
-                  />
-                </Button>
-              </div>
+            <div className="lg:col-span-2">
+              <AdminUploadField
+                id="hero-media-upload"
+                label="Upload local media"
+                helperText="JPG, PNG, WEBP, GIF, MP4, WEBM, MOV, M4V. Max 80MB."
+                uploadingFileName={uploadingFileName}
+                accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,video/x-m4v"
+                previewUrl={
+                  form.background_type === "image"
+                    ? form.background_url
+                    : undefined
+                }
+                previewAlt={form.title || "Hero media preview"}
+                onFileChange={(file) => void handleFileUpload(file)}
+              />
             </div>
 
             <div className="space-y-2">
