@@ -64,7 +64,7 @@ export function AdminLoginPage() {
       </style>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,126,84,0.45),transparent_35%),radial-gradient(circle_at_80%_65%,rgba(5,88,63,0.5),transparent_38%),linear-gradient(135deg,#000,#031d16_52%,#000)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(16,185,129,0.35),transparent_40%)] bg-[length:160%_160%] opacity-80 blur-2xl animate-[adminLoginGlow_10s_ease-in-out_infinite]" />
-      <Card className="relative w-full max-w-md border-white/10 bg-white text-black shadow-2xl">
+      <Card className="relative w-full max-w-md border-zinc-200 bg-white text-zinc-950 shadow-2xl">
         <CardHeader className="space-y-3">
           <div className="space-y-1">
             <CardTitle className="text-2xl font-normal">Admin Login</CardTitle>
@@ -84,6 +84,7 @@ export function AdminLoginPage() {
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="admin@pxdlpro.com"
                 autoComplete="email"
+                className="h-11 border-zinc-300 bg-zinc-50 px-3 text-zinc-950 placeholder:text-zinc-400 focus-visible:bg-white"
                 required
               />
             </div>
@@ -97,7 +98,7 @@ export function AdminLoginPage() {
                   onChange={(event) => setPassword(event.target.value)}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  className="pr-10"
+                  className="h-11 border-zinc-300 bg-zinc-50 px-3 pr-10 text-zinc-950 placeholder:text-zinc-400 focus-visible:bg-white"
                   required
                 />
                 <Button
