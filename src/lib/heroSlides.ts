@@ -4,6 +4,7 @@ export type HeroSlide = {
   id: number;
   eyebrow: string | null;
   title: string;
+  title_size: number | null;
   subtitle: string | null;
   cta_label: string | null;
   cta_url: string | null;
@@ -35,6 +36,7 @@ export const defaultHeroSlide: HeroSlide = {
   id: 0,
   eyebrow: null,
   title: "Put padel at the center of every game",
+  title_size: 96,
   subtitle:
     "Connect players, clubs, rankings, and matchday experiences in one growing padel ecosystem.",
   cta_label: "Book a demo",

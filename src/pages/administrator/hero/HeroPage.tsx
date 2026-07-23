@@ -65,6 +65,7 @@ import { uploadErrorMessage } from "@/lib/uploadErrors";
 type HeroSlideForm = {
   eyebrow: string;
   title: string;
+  title_size: string;
   subtitle: string;
   cta_label: string;
   cta_url: string;
@@ -76,6 +77,7 @@ type HeroSlideForm = {
 const emptyForm: HeroSlideForm = {
   eyebrow: "",
   title: "",
+  title_size: "96",
   subtitle: "",
   cta_label: "Reclub",
   cta_url: "/administrator/dashboard",
@@ -92,6 +94,7 @@ function slideToForm(slide?: HeroSlide): HeroSlideForm {
   return {
     eyebrow: slide.eyebrow ?? "",
     title: slide.title,
+    title_size: slide.title_size ? String(slide.title_size) : "96",
     subtitle: slide.subtitle ?? "",
     cta_label: slide.cta_label ?? "",
     cta_url: slide.cta_url ?? "",
@@ -105,6 +108,7 @@ function formToPayload(form: HeroSlideForm): HeroSlidePayload {
   return {
     eyebrow: form.eyebrow || null,
     title: form.title,
+    title_size: form.title_size ? Number(form.title_size) : null,
     subtitle: form.subtitle || null,
     cta_label: form.cta_label || null,
     cta_url: form.cta_url || null,
@@ -478,6 +482,10 @@ function HeroSlideDetailDialog({
         {slide && (
           <div className="grid gap-3 text-sm">
             <DetailRow label="Title" value={slide.title} />
+            <DetailRow
+              label="Headline size"
+              value={slide.title_size ? `${slide.title_size}px` : "Default"}
+            />
             <DetailRow label="Eyebrow" value={slide.eyebrow || "-"} />
             <DetailRow label="Subtitle" value={slide.subtitle || "-"} />
             <DetailRow label="CTA label" value={slide.cta_label || "-"} />
@@ -619,6 +627,24 @@ function HeroSlideDialog({
                 onChange={(event) => updateField("title", event.target.value)}
                 required
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="hero-title-size">Headline size</Label>
+              <Input
+                id="hero-title-size"
+                type="number"
+                min={40}
+                max={180}
+                value={form.title_size}
+                onChange={(event) =>
+                  updateField("title_size", event.target.value)
+                }
+                placeholder="96"
+              />
+              <p className="text-xs text-zinc-500">
+                Desktop size in px. Mobile will scale down automatically.
+              </p>
             </div>
 
             <div className="space-y-2 lg:col-span-2">

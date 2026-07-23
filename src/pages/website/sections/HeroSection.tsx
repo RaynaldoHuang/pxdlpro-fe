@@ -23,6 +23,8 @@ export function HeroSection() {
   const activeSlide = slides[activeIndex] ?? slides[0];
   const ctaUrl = activeSlide.cta_url || routes.administrator.dashboard;
   const isExternalCta = /^https?:\/\//.test(ctaUrl);
+  const titleSize = activeSlide.title_size ?? 96;
+  const mobileTitleSize = Math.max(42, Math.round(titleSize * 0.55));
 
   useEffect(() => {
     setActiveIndex(0);
@@ -71,7 +73,12 @@ export function HeroSection() {
               {activeSlide.eyebrow}
             </p>
           )}
-          <h1 className="font-display mx-auto max-w-272 text-6xl font-medium leading-[1.2] tracking-normal text-white sm:text-7xl lg:text-8xl">
+          <h1
+            className="font-display mx-auto max-w-272 font-medium leading-[1.2] tracking-normal text-white"
+            style={{
+              fontSize: `clamp(${mobileTitleSize}px, 8vw, ${titleSize}px)`,
+            }}
+          >
             {activeSlide.title}
           </h1>
           {activeSlide.subtitle && (
