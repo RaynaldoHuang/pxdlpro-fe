@@ -1,25 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
-import clientLogo from "@/assets/client1.webp";
-import { getTrustedBrands, type TrustedBrand } from "@/lib/trustedBrands";
-
-const fallbackTrustedBrands: TrustedBrand[] = Array.from(
-  { length: 20 },
-  (_, index) => ({
-    id: index + 1,
-    name: `Client ${index + 1}`,
-    logo_url: clientLogo,
-    website_url: null,
-    sort_order: index,
-    is_active: true,
-  }),
-);
+import { getTrustedBrands } from "@/lib/trustedBrands";
 
 function resolveLogoUrl(logoUrl: string) {
-  if (!logoUrl || logoUrl === "/src/assets/client1.webp") {
-    return clientLogo;
-  }
-
   return logoUrl;
 }
 
@@ -29,10 +12,11 @@ export function TrustedBySection() {
     queryFn: getTrustedBrands,
   });
 
-  const trustedBrands =
-    data && data.length > 0
-      ? data.filter((brand) => brand.is_active)
-      : fallbackTrustedBrands;
+  const trustedBrands = data?.filter((brand) => brand.is_active) ?? [];
+
+  if (trustedBrands.length === 0) {
+    return null;
+  }
 
   return (
     <section className="bg-black px-5 py-24 sm:px-8 sm:py-28 lg:px-12">
