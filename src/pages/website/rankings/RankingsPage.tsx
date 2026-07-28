@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import {
   getPlayers,
+  getPlayerRankingImage,
   getRankingCategoryLabel,
   rankingCategoryOptions,
   type Player,
@@ -58,62 +59,66 @@ function RankingTopTen({
         </div>
       ) : (
         <div className="grid gap-12 pt-10 sm:gap-10">
-          {highlightedPlayers.map((player, index) => (
-            <article
-              key={player.id}
-              className="group relative isolate grid min-h-32 grid-cols-[168px_minmax(0,1fr)] items-center overflow-visible bg-[linear-gradient(90deg,rgba(5,80,61,0.98)_0%,rgba(3,42,31,0.9)_34%,rgba(0,0,0,0.9)_100%)] px-3 transition-transform duration-300 hover:-translate-y-0.5 sm:min-h-30 sm:grid-cols-[108px_190px_1fr_66px] sm:px-4"
-            >
-              <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(18,142,103,0.35),transparent_34%)] opacity-90" />
+          {highlightedPlayers.map((player, index) => {
+            const playerImage = getPlayerRankingImage(player);
 
-              <div className="absolute left-3 top-1/2 z-30 flex w-18 -translate-y-1/2 select-none items-center justify-center text-center text-[3rem] font-bold leading-none text-white/95 sm:hidden">
-                {player.rank || index + 1}
-              </div>
+            return (
+              <article
+                key={player.id}
+                className="group relative isolate grid min-h-32 grid-cols-[168px_minmax(0,1fr)] items-center overflow-visible bg-[linear-gradient(90deg,rgba(5,80,61,0.98)_0%,rgba(3,42,31,0.9)_34%,rgba(0,0,0,0.9)_100%)] px-3 transition-transform duration-300 hover:-translate-y-0.5 sm:min-h-30 sm:grid-cols-[108px_190px_1fr_66px] sm:px-4"
+              >
+                <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(18,142,103,0.35),transparent_34%)] opacity-90" />
 
-              <div className="relative z-30 hidden flex-col justify-center sm:flex">
-                <span className="text-4xl font-normal leading-none text-white">
-                  {player.points}
-                </span>
-                <span className="mt-1 text-[10px] font-light uppercase tracking-normal text-white/55">
-                  Points
-                </span>
-              </div>
-
-              <div className="pointer-events-none absolute bottom-0 left-[2.6rem] z-20 flex h-42 w-30 items-end justify-center overflow-visible sm:left-24 sm:h-36 sm:w-40 sm:overflow-hidden lg:left-28">
-                {player.image_url ? (
-                  <img
-                    src={player.image_url}
-                    alt=""
-                    className="h-42 w-auto max-w-none translate-y-0 object-contain object-bottom drop-shadow-[0_18px_42px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:scale-[1.03] sm:h-40 sm:max-w-full sm:translate-y-4"
-                  />
-                ) : (
-                  <div className="flex size-16 items-center justify-center rounded-full bg-white/10 text-white/45">
-                    <Trophy className="size-7" />
-                  </div>
-                )}
-              </div>
-
-              <div className="relative z-30 col-start-2 min-w-0 py-4 pl-0 sm:col-start-3 sm:pl-2 sm:pr-0">
-                <p className="line-clamp-2 text-base font-semibold uppercase leading-tight text-white sm:truncate sm:text-2xl sm:leading-none">
-                  {player.name}
-                </p>
-                <p className="mt-2 text-sm font-light leading-none text-white/85 sm:hidden">
-                  {player.points} points
-                </p>
-                <p className="mt-2 hidden text-xs font-light uppercase tracking-normal text-white/50 sm:block">
-                  {getRankingCategoryLabel(player.ranking_category)}
-                </p>
-              </div>
-
-              <div className="relative z-30 hidden justify-self-end text-right sm:col-start-4 sm:block">
-                <span className="text-xs font-light uppercase tracking-normal text-white/45">
-                  Rank
-                </span>
-                <p className="mt-1 text-3xl font-semibold leading-none text-white">
+                <div className="absolute left-3 top-1/2 z-30 flex w-18 -translate-y-1/2 select-none items-center justify-center text-center text-[3rem] font-bold leading-none text-white/95 sm:hidden">
                   {player.rank || index + 1}
-                </p>
-              </div>
-            </article>
-          ))}
+                </div>
+
+                <div className="relative z-30 hidden flex-col justify-center sm:flex">
+                  <span className="text-4xl font-normal leading-none text-white">
+                    {player.points}
+                  </span>
+                  <span className="mt-1 text-[10px] font-light uppercase tracking-normal text-white/55">
+                    Points
+                  </span>
+                </div>
+
+                <div className="pointer-events-none absolute bottom-0 left-[2.6rem] z-20 flex h-42 w-30 items-end justify-center overflow-visible sm:left-24 sm:h-36 sm:w-40 sm:overflow-hidden lg:left-28">
+                  {playerImage ? (
+                    <img
+                      src={playerImage}
+                      alt=""
+                      className="h-42 w-auto max-w-none translate-y-0 object-contain object-bottom drop-shadow-[0_18px_42px_rgba(0,0,0,0.5)] transition-transform duration-300 group-hover:scale-[1.03] sm:h-40 sm:max-w-full sm:translate-y-4"
+                    />
+                  ) : (
+                    <div className="flex size-16 items-center justify-center rounded-full bg-white/10 text-white/45">
+                      <Trophy className="size-7" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="relative z-30 col-start-2 min-w-0 py-4 pl-0 sm:col-start-3 sm:pl-2 sm:pr-0">
+                  <p className="line-clamp-2 text-base font-semibold uppercase leading-tight text-white sm:truncate sm:text-2xl sm:leading-none">
+                    {player.name}
+                  </p>
+                  <p className="mt-2 text-sm font-light leading-none text-white/85 sm:hidden">
+                    {player.points} points
+                  </p>
+                  <p className="mt-2 hidden text-xs font-light uppercase tracking-normal text-white/50 sm:block">
+                    {getRankingCategoryLabel(player.ranking_category)}
+                  </p>
+                </div>
+
+                <div className="relative z-30 hidden justify-self-end text-right sm:col-start-4 sm:block">
+                  <span className="text-xs font-light uppercase tracking-normal text-white/45">
+                    Rank
+                  </span>
+                  <p className="mt-1 text-3xl font-semibold leading-none text-white">
+                    {player.rank || index + 1}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
     </section>
@@ -142,35 +147,39 @@ function RankingTable({
         </div>
 
         <div className="mt-3 grid gap-3">
-          {tablePlayers.map((player, index) => (
-            <article
-              key={player.id}
-              className="grid min-h-20 grid-cols-[64px_70px_minmax(0,1fr)_76px] items-center overflow-hidden border border-white/45 bg-[linear-gradient(90deg,rgba(3,42,31,0.72),rgba(0,0,0,0.8))] px-4 text-white sm:grid-cols-[72px_88px_minmax(0,1fr)_90px]"
-            >
-              <div className="text-2xl font-semibold leading-none">
-                {player.rank || index + rankingDisplayLimit + 1}
-              </div>
-              <div className="flex h-full -translate-x-3 items-end justify-center self-end overflow-hidden sm:translate-x-0">
-                {player.image_url ? (
-                  <img
-                    src={player.image_url}
-                    alt=""
-                    className="h-18 w-auto translate-y-1 object-contain object-bottom sm:h-20"
-                  />
-                ) : (
-                  <Trophy className="mb-4 size-6 text-white/45" />
-                )}
-              </div>
-              <div className="min-w-0 pl-3 sm:pl-0">
-                <p className="line-clamp-2 text-xs font-normal uppercase leading-tight sm:truncate sm:text-sm">
-                  {player.name}
-                </p>
-              </div>
-              <div className="text-right text-2xl font-normal">
-                {player.points}
-              </div>
-            </article>
-          ))}
+          {tablePlayers.map((player, index) => {
+            const playerImage = getPlayerRankingImage(player);
+
+            return (
+              <article
+                key={player.id}
+                className="grid min-h-20 grid-cols-[64px_70px_minmax(0,1fr)_76px] items-center overflow-hidden border border-white/45 bg-[linear-gradient(90deg,rgba(3,42,31,0.72),rgba(0,0,0,0.8))] px-4 text-white sm:grid-cols-[72px_88px_minmax(0,1fr)_90px]"
+              >
+                <div className="text-2xl font-semibold leading-none">
+                  {player.rank || index + rankingDisplayLimit + 1}
+                </div>
+                <div className="flex h-full -translate-x-3 items-end justify-center self-end overflow-hidden sm:translate-x-0">
+                  {playerImage ? (
+                    <img
+                      src={playerImage}
+                      alt=""
+                      className="h-18 w-auto translate-y-1 object-contain object-bottom sm:h-20"
+                    />
+                  ) : (
+                    <Trophy className="mb-4 size-6 text-white/45" />
+                  )}
+                </div>
+                <div className="min-w-0 pl-3 sm:pl-0">
+                  <p className="line-clamp-2 text-xs font-normal uppercase leading-tight sm:truncate sm:text-sm">
+                    {player.name}
+                  </p>
+                </div>
+                <div className="text-right text-2xl font-normal">
+                  {player.points}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

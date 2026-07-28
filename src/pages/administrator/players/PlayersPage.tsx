@@ -63,6 +63,7 @@ type PlayerForm = {
   points: string;
   name: string;
   image_url: string;
+  formal_image_url: string;
   gender: PlayerGenderValue;
   ranking_category: RankingCategoryValue;
   is_active: boolean;
@@ -72,6 +73,7 @@ const emptyForm: PlayerForm = {
   points: "0",
   name: "",
   image_url: "",
+  formal_image_url: "",
   gender: "men",
   ranking_category: "pxdl_elite",
   is_active: true,
@@ -86,6 +88,7 @@ function playerToForm(player?: Player | null): PlayerForm {
     points: String(player.points),
     name: player.name,
     image_url: player.image_url,
+    formal_image_url: player.formal_image_url ?? "",
     gender: player.gender,
     ranking_category: player.ranking_category,
     is_active: player.is_active,
@@ -97,6 +100,7 @@ function formToPayload(form: PlayerForm): PlayerPayload {
     points: Number(form.points),
     name: form.name,
     image_url: form.image_url,
+    formal_image_url: form.formal_image_url || null,
     gender: form.gender,
     ranking_category: form.ranking_category,
     is_active: form.is_active,
@@ -271,7 +275,7 @@ export function PlayersPage() {
               <TableRow>
                 <TableHead className="w-14">Rank</TableHead>
                 <TableHead className="w-24">Points</TableHead>
-                <TableHead className="w-24">Image</TableHead>
+                <TableHead className="w-36">Images</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Gender</TableHead>
@@ -318,16 +322,35 @@ export function PlayersPage() {
                   <TableCell>{player.rank}</TableCell>
                   <TableCell>{player.points}</TableCell>
                   <TableCell>
-                    <div className="flex size-14 items-center justify-center overflow-hidden rounded-md border bg-muted/30">
-                      {player.image_url ? (
-                        <img
-                          src={player.image_url}
-                          alt={player.name}
-                          className="size-full object-contain"
-                        />
-                      ) : (
-                        <ImageIcon className="size-5 text-muted-foreground" />
-                      )}
+                    <div className="flex gap-2">
+                      <div
+                        className="flex size-14 items-center justify-center overflow-hidden rounded-md border bg-muted/30"
+                        title="Dominant image"
+                      >
+                        {player.image_url ? (
+                          <img
+                            src={player.image_url}
+                            alt={player.name}
+                            className="size-full object-contain"
+                          />
+                        ) : (
+                          <ImageIcon className="size-5 text-muted-foreground" />
+                        )}
+                      </div>
+                      <div
+                        className="flex size-14 items-center justify-center overflow-hidden rounded-md border bg-muted/30"
+                        title="Formal image"
+                      >
+                        {player.formal_image_url ? (
+                          <img
+                            src={player.formal_image_url}
+                            alt={player.name}
+                            className="size-full object-contain"
+                          />
+                        ) : (
+                          <ImageIcon className="size-5 text-muted-foreground" />
+                        )}
+                      </div>
                     </div>
                   </TableCell>
                   <TableCell className="font-normal">{player.name}</TableCell>
@@ -487,7 +510,10 @@ function PlayerDialog({
     onSubmit(form);
   }
 
-  async function handleImageUpload(file: File | undefined) {
+  async function handleImageUpload(
+    file: File | undefined,
+    field: "image_url" | "formal_image_url",
+  ) {
     if (!file) {
       return;
     }
@@ -503,7 +529,7 @@ function PlayerDialog({
       const media = await uploadPlayerImage(file);
       setForm((current) => ({
         ...current,
-        image_url: media.url,
+        [field]: media.url,
       }));
       toast.success("Image berhasil diupload.");
     } catch (error) {
@@ -526,14 +552,27 @@ function PlayerDialog({
 
           <div className="grid gap-4">
             <AdminUploadField
-              id="player-image-upload"
-              label="Upload image"
+              id="player-dominant-image-upload"
+              label="Upload dominant image"
               helperText="JPG, PNG, WEBP, GIF. Max 12MB."
               uploadingFileName={uploadingFileName}
               accept="image/jpeg,image/png,image/webp,image/gif"
               previewUrl={form.image_url}
-              previewAlt={form.name || "Player preview"}
-              onFileChange={(file) => void handleImageUpload(file)}
+              previewAlt={form.name || "Dominant player preview"}
+              onFileChange={(file) => void handleImageUpload(file, "image_url")}
+            />
+
+            <AdminUploadField
+              id="player-formal-image-upload"
+              label="Upload formal image"
+              helperText="Dipakai otomatis untuk rank 11 ke atas. JPG, PNG, WEBP, GIF. Max 12MB."
+              uploadingFileName={uploadingFileName}
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              previewUrl={form.formal_image_url}
+              previewAlt={form.name || "Formal player preview"}
+              onFileChange={(file) =>
+                void handleImageUpload(file, "formal_image_url")
+              }
             />
 
             <div className="grid gap-4 sm:grid-cols-[140px_1fr]">
@@ -611,7 +650,7 @@ function PlayerDialog({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="player-image-url">Image URL</Label>
+              <Label htmlFor="player-image-url">Dominant image URL</Label>
               <Input
                 id="player-image-url"
                 value={form.image_url}
@@ -620,6 +659,18 @@ function PlayerDialog({
                 }
                 placeholder="/storage/players/player.webp"
                 required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="player-formal-image-url">Formal image URL</Label>
+              <Input
+                id="player-formal-image-url"
+                value={form.formal_image_url}
+                onChange={(event) =>
+                  updateField("formal_image_url", event.target.value)
+                }
+                placeholder="/storage/players/player-formal.webp"
               />
             </div>
 

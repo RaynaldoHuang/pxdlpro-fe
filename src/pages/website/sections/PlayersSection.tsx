@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import {
   getPlayers,
+  getPlayerRankingImage,
   rankingCategoryOptions,
   type Player as BackendPlayer,
   type RankingCategoryValue,
@@ -38,7 +39,7 @@ function playerToCarouselPlayer(player: BackendPlayer): CarouselPlayer {
   return {
     rank: player.rank,
     name: player.name,
-    image: player.image_url,
+    image: getPlayerRankingImage(player),
   };
 }
 

@@ -21,6 +21,7 @@ export type Player = {
   points: number;
   name: string;
   image_url: string;
+  formal_image_url: string | null;
   gender: PlayerGenderValue;
   ranking_category: RankingCategoryValue;
   sort_order: number;
@@ -56,6 +57,14 @@ export function getPlayerGenderLabel(value: PlayerGenderValue) {
   return (
     playerGenderOptions.find((option) => option.value === value)?.label ?? value
   );
+}
+
+export function getPlayerRankingImage(player: Player) {
+  if (player.rank > 10) {
+    return player.formal_image_url || player.image_url;
+  }
+
+  return player.image_url || player.formal_image_url || "";
 }
 
 export async function getPlayers(rankingCategory?: RankingCategoryValue) {
