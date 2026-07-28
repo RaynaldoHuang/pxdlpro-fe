@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import {
   Edit3,
   ImageIcon,
@@ -69,6 +70,11 @@ type PlayerForm = {
   is_active: boolean;
 };
 
+type ApiErrorResponse = {
+  message?: string;
+  errors?: Record<string, string[]>;
+};
+
 const emptyForm: PlayerForm = {
   points: "0",
   name: "",
@@ -105,6 +111,17 @@ function formToPayload(form: PlayerForm): PlayerPayload {
     ranking_category: form.ranking_category,
     is_active: form.is_active,
   };
+}
+
+function mutationErrorMessage(error: unknown, fallback: string) {
+  if (!isAxiosError<ApiErrorResponse>(error)) {
+    return fallback;
+  }
+
+  const errors = error.response?.data.errors;
+  const firstError = errors ? Object.values(errors)[0]?.[0] : null;
+
+  return firstError || error.response?.data.message || fallback;
 }
 
 export function PlayersPage() {
@@ -154,7 +171,8 @@ export function PlayersPage() {
       setIsEditorOpen(false);
       await refreshPlayers();
     },
-    onError: () => toast.error("Gagal menambahkan player."),
+    onError: (error) =>
+      toast.error(mutationErrorMessage(error, "Gagal menambahkan player.")),
   });
 
   const updateMutation = useMutation({
@@ -165,7 +183,8 @@ export function PlayersPage() {
       setEditingPlayer(null);
       await refreshPlayers();
     },
-    onError: () => toast.error("Gagal mengupdate player."),
+    onError: (error) =>
+      toast.error(mutationErrorMessage(error, "Gagal mengupdate player.")),
   });
 
   const deleteMutation = useMutation({
@@ -175,7 +194,8 @@ export function PlayersPage() {
       setDeleteTarget(null);
       await refreshPlayers();
     },
-    onError: () => toast.error("Gagal menghapus player."),
+    onError: (error) =>
+      toast.error(mutationErrorMessage(error, "Gagal menghapus player.")),
   });
 
   function openAddDialog() {
@@ -507,6 +527,12 @@ function PlayerDialog({
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!form.image_url.trim()) {
+      toast.error("Upload dominant image atau isi Dominant image URL dulu.");
+      return;
+    }
+
     onSubmit(form);
   }
 
