@@ -32,7 +32,7 @@ export function AdminUploadField({
   const isUploading = Boolean(uploadingFileName);
 
   return (
-    <div className="grid gap-4 sm:grid-cols-[112px_1fr] sm:items-start">
+    <div className="grid min-w-0 gap-4 sm:grid-cols-[112px_minmax(0,1fr)] sm:items-start">
       <div
         className={cn(
           "flex aspect-square items-center justify-center overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 p-4",
@@ -50,16 +50,16 @@ export function AdminUploadField({
         )}
       </div>
 
-      <div className="space-y-2">
+      <div className="min-w-0 space-y-2">
         <Label htmlFor={id}>{label}</Label>
-        <div className="flex flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="min-w-0 truncate text-xs text-zinc-500">
+        <div className="flex min-w-0 flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="min-w-0 text-xs text-zinc-500 sm:break-words">
             {uploadingFileName ? `Uploading ${uploadingFileName}...` : helperText}
           </p>
           <Button
             type="button"
             variant="outline"
-            className="relative overflow-hidden border-zinc-300 bg-white text-zinc-950 hover:bg-zinc-100"
+            className="relative shrink-0 overflow-hidden border-zinc-300 bg-white text-zinc-950 hover:bg-zinc-100"
             disabled={isUploading}
           >
             {isUploading ? (

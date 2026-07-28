@@ -541,16 +541,23 @@ function PlayerDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[calc(100vh-2rem)] overflow-y-auto sm:max-w-2xl">
-        <form className="grid gap-4" onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>{player ? "Edit player" : "Add player"}</DialogTitle>
-            <DialogDescription>
-              Data ini akan tampil di carousel Players website publik.
-            </DialogDescription>
-          </DialogHeader>
+      <DialogContent className="flex max-h-[calc(100dvh-2rem)] w-[calc(100vw-1rem)] max-w-[calc(100vw-1rem)] flex-col overflow-hidden p-0 sm:w-[calc(100vw-2rem)] sm:max-w-4xl">
+        <form
+          className="flex min-h-0 min-w-0 flex-1 flex-col"
+          onSubmit={handleSubmit}
+        >
+          <div className="min-w-0 px-4 pt-4">
+            <DialogHeader>
+              <DialogTitle>
+                {player ? "Edit player" : "Add player"}
+              </DialogTitle>
+              <DialogDescription>
+                Data ini akan tampil di carousel Players website publik.
+              </DialogDescription>
+            </DialogHeader>
+          </div>
 
-          <div className="grid gap-4">
+          <div className="grid min-w-0 flex-1 gap-4 overflow-y-auto overflow-x-hidden px-4 py-4">
             <AdminUploadField
               id="player-dominant-image-upload"
               label="Upload dominant image"
@@ -575,8 +582,8 @@ function PlayerDialog({
               }
             />
 
-            <div className="grid gap-4 sm:grid-cols-[140px_1fr]">
-              <div className="space-y-2">
+            <div className="grid min-w-0 gap-4 sm:grid-cols-[140px_minmax(0,1fr)]">
+              <div className="min-w-0 space-y-2">
                 <Label htmlFor="player-points">Points</Label>
                 <Input
                   id="player-points"
@@ -590,7 +597,7 @@ function PlayerDialog({
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="min-w-0 space-y-2">
                 <Label htmlFor="player-name">Player name</Label>
                 <Input
                   id="player-name"
@@ -602,8 +609,8 @@ function PlayerDialog({
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
+            <div className="grid min-w-0 gap-4 sm:grid-cols-2">
+              <div className="min-w-0 space-y-2">
                 <Label>Ranking category</Label>
                 <Select
                   value={form.ranking_category}
@@ -627,7 +634,7 @@ function PlayerDialog({
                 </Select>
               </div>
 
-              <div className="space-y-2">
+              <div className="min-w-0 space-y-2">
                 <Label>Gender</Label>
                 <Select
                   value={form.gender}
@@ -649,7 +656,7 @@ function PlayerDialog({
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="min-w-0 space-y-2">
               <Label htmlFor="player-image-url">Dominant image URL</Label>
               <Input
                 id="player-image-url"
@@ -662,7 +669,7 @@ function PlayerDialog({
               />
             </div>
 
-            <div className="space-y-2">
+            <div className="min-w-0 space-y-2">
               <Label htmlFor="player-formal-image-url">Formal image URL</Label>
               <Input
                 id="player-formal-image-url"
@@ -688,7 +695,7 @@ function PlayerDialog({
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="mx-0 mb-0 shrink-0 rounded-none sm:flex-nowrap">
             <Button
               type="button"
               variant="outline"
@@ -698,7 +705,7 @@ function PlayerDialog({
             </Button>
             <Button
               type="submit"
-              className="bg-[#07503d] text-white hover:bg-[#064433]"
+              className="bg-[#07503d] text-white hover:bg-[#064433] sm:shrink-0"
               disabled={pending}
             >
               {pending && <Loader2 className="size-4 animate-spin" />}
