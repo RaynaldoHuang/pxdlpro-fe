@@ -113,6 +113,16 @@ function formToPayload(form: PlayerForm): PlayerPayload {
   };
 }
 
+function additionalPointsToPayload(
+  form: PlayerForm,
+  currentPoints: number,
+): PlayerPayload {
+  return {
+    ...formToPayload(form),
+    points: currentPoints + Number(form.points),
+  };
+}
+
 function mutationErrorMessage(error: unknown, fallback: string) {
   if (!isAxiosError<ApiErrorResponse>(error)) {
     return fallback;
@@ -209,12 +219,14 @@ export function PlayersPage() {
   }
 
   function submitEditor(form: PlayerForm) {
-    const payload = formToPayload(form);
-
     if (editingPlayer) {
+      const payload = additionalPointsToPayload(form, editingPlayer.points);
+
       updateMutation.mutate({ id: editingPlayer.id, player: payload });
       return;
     }
+
+    const payload = formToPayload(form);
 
     createMutation.mutate(payload);
   }
@@ -507,11 +519,16 @@ function PlayerDialog({
   const [uploadingFileName, setUploadingFileName] = useState<string | null>(
     null,
   );
+  const currentPoints = player?.points ?? 0;
+  const inputPoints = Number(form.points);
+  const safeInputPoints = Number.isFinite(inputPoints) ? inputPoints : 0;
+  const previewTotalPoints = currentPoints + safeInputPoints;
 
   useEffect(() => {
     if (open) {
       setForm({
         ...playerToForm(player),
+        points: player ? "0" : playerToForm(player).points,
         ranking_category: player?.ranking_category ?? defaultCategory,
         gender: player?.gender ?? defaultGender,
       });
@@ -610,7 +627,9 @@ function PlayerDialog({
 
             <div className="grid min-w-0 gap-4 sm:grid-cols-[140px_minmax(0,1fr)]">
               <div className="min-w-0 space-y-2">
-                <Label htmlFor="player-points">Points</Label>
+                <Label htmlFor="player-points">
+                  {player ? "Tambah points" : "Points"}
+                </Label>
                 <Input
                   id="player-points"
                   type="number"
@@ -621,6 +640,13 @@ function PlayerDialog({
                   }
                   required
                 />
+                {player && (
+                  <p className="text-xs text-muted-foreground">
+                    Saat ini {currentPoints.toLocaleString("id-ID")} points.
+                    Setelah disimpan menjadi{" "}
+                    {previewTotalPoints.toLocaleString("id-ID")} points.
+                  </p>
+                )}
               </div>
 
               <div className="min-w-0 space-y-2">
