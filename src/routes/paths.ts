@@ -24,3 +24,9 @@ export const routes = {
     settings: "/administrator/settings",
   },
 };
+
+export const rankingCategoryRoutes = {
+  pxdl_elite: `${routes.website.rankings}?category=pxdl_elite`,
+  pxdl_squad: `${routes.website.rankings}?category=pxdl_squad`,
+  pxdl_member: `${routes.website.rankings}?category=pxdl_member`,
+} as const;

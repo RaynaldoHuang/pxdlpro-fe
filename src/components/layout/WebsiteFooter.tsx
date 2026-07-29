@@ -4,7 +4,7 @@ import { ArrowUp } from "lucide-react";
 import logo from "@/assets/logo.webp";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/common/Container";
-import { routes } from "@/routes/paths";
+import { rankingCategoryRoutes, routes } from "@/routes/paths";
 
 const footerColumns = [
   {
@@ -15,9 +15,9 @@ const footerColumns = [
         title: "System & Points Breakdown",
         href: routes.website.systemPointsBreakdown,
       },
-      { title: "PXDL Elite", href: "/#pxdl-elite" },
-      { title: "PXDL Squad", href: "/#pxdl-squad" },
-      { title: "PXDL Member", href: "/#pxdl-member" },
+      { title: "PXDL Elite", href: rankingCategoryRoutes.pxdl_elite },
+      { title: "PXDL Squad", href: rankingCategoryRoutes.pxdl_squad },
+      { title: "PXDL Member", href: rankingCategoryRoutes.pxdl_member },
       { title: "Events", href: routes.website.events },
       { title: "Gallery", href: routes.website.gallery },
     ],

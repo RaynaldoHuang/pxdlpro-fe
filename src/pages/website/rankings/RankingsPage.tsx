@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Loader2, Trophy } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import {
   Select,
@@ -20,6 +21,15 @@ import {
 
 const rankingFilters = [...rankingCategoryOptions] as const;
 const rankingDisplayLimit = 10;
+const rankingCategoryValues = rankingCategoryOptions.map(
+  (option) => option.value,
+);
+
+function isRankingCategoryValue(
+  value: string | null,
+): value is RankingCategoryValue {
+  return rankingCategoryValues.includes(value as RankingCategoryValue);
+}
 
 function sortPlayersByPoints(players: Player[]) {
   return [...players].sort((first, second) => {
@@ -187,8 +197,11 @@ function RankingTable({
 }
 
 export function RankingsPage() {
-  const [rankingFilter, setRankingFilter] =
-    useState<RankingCategoryValue>("pxdl_elite");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const categoryParam = searchParams.get("category");
+  const rankingFilter = isRankingCategoryValue(categoryParam)
+    ? categoryParam
+    : "pxdl_elite";
   const { data = [], isLoading, isError } = useQuery({
     queryKey: ["players", rankingFilter],
     queryFn: () => getPlayers(rankingFilter),
@@ -226,9 +239,7 @@ export function RankingsPage() {
 
           <Select
             value={rankingFilter}
-            onValueChange={(value) =>
-              setRankingFilter(value as RankingCategoryValue)
-            }
+            onValueChange={(value) => setSearchParams({ category: value })}
           >
             <SelectTrigger className="h-11! w-full min-w-52 rounded-md border-0 bg-[#07503d] px-4 text-sm font-light text-white shadow-none transition-colors hover:bg-[#07503d]/95 focus-visible:ring-white/25 sm:w-56 [&_svg]:text-white/70">
               <SelectValue />

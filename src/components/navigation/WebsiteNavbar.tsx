@@ -6,7 +6,7 @@ import { Container } from "@/components/common/Container";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { routes } from "@/routes/paths";
+import { rankingCategoryRoutes, routes } from "@/routes/paths";
 
 import logo from "@/assets/logo.webp";
 
@@ -21,15 +21,15 @@ const websiteNavigationItems = [
       },
       {
         title: "PXDL Elite",
-        href: "/#pxdl-elite",
+        href: rankingCategoryRoutes.pxdl_elite,
       },
       {
         title: "PXDL Squad",
-        href: "/#pxdl-squad",
+        href: rankingCategoryRoutes.pxdl_squad,
       },
       {
         title: "PXDL Member",
-        href: "/#pxdl-member",
+        href: rankingCategoryRoutes.pxdl_member,
       },
     ],
   },
@@ -55,19 +55,19 @@ const rankingMenuItems = [
   {
     title: "PXDL Elite",
     description: "Top competitive ranking for elite padel players",
-    href: "/#pxdl-elite",
+    href: rankingCategoryRoutes.pxdl_elite,
     tags: ["Leaderboard", "Tournament"],
   },
   {
     title: "PXDL Squad",
     description: "Team-based ranking for active clubs and squads",
-    href: "/#pxdl-squad",
+    href: rankingCategoryRoutes.pxdl_squad,
     tags: ["Teams", "Clubs"],
   },
   {
     title: "PXDL Member",
     description: "Member ranking for the wider PXDL community",
-    href: "/#pxdl-member",
+    href: rankingCategoryRoutes.pxdl_member,
     tags: ["Community", "Member"],
   },
 ];

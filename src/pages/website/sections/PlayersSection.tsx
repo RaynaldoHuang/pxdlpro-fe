@@ -17,6 +17,7 @@ import {
   type Player as BackendPlayer,
   type RankingCategoryValue,
 } from "@/lib/players";
+import { rankingCategoryRoutes } from "@/routes/paths";
 
 type CarouselPlayer = {
   rank: number;
@@ -29,9 +30,7 @@ type PlayerCarouselProps = {
 };
 
 const rankingCategoryHrefs: Record<RankingCategoryValue, string> = {
-  pxdl_elite: "/#pxdl-elite",
-  pxdl_squad: "/#pxdl-squad",
-  pxdl_member: "/#pxdl-member",
+  ...rankingCategoryRoutes,
 };
 const rankingDisplayLimit = 10;
 
