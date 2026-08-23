@@ -78,7 +78,7 @@ function renderArticleContent(content: string) {
   if (/<[a-z][\s\S]*>/i.test(content)) {
     return (
       <div
-        className="space-y-7 text-base font-light leading-8 text-white/72 [&_a]:text-white [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-2 [&_blockquote]:border-[#07503d] [&_blockquote]:pl-5 [&_blockquote]:text-lg [&_blockquote]:text-white/78 [&_h2]:text-3xl [&_h2]:font-normal [&_h2]:leading-tight [&_h2]:text-white [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-normal [&_strong]:text-white [&_ul]:list-disc [&_ul]:pl-5"
+        className="font-sans! space-y-7 text-base font-light leading-8 text-white/72 [&_*]:!font-sans [&_a]:text-white [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-2 [&_blockquote]:border-[#07503d] [&_blockquote]:pl-5 [&_blockquote]:text-lg [&_blockquote]:text-white/78 [&_h2]:text-3xl [&_h2]:font-normal [&_h2]:leading-tight [&_h2]:text-white [&_li]:mt-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-normal [&_strong]:text-white [&_ul]:list-disc [&_ul]:pl-5"
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );

@@ -8,6 +8,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 import { AdminUploadField } from "@/components/common/AdminUploadField";
@@ -135,6 +136,7 @@ function mutationErrorMessage(error: unknown, fallback: string) {
 }
 
 export function PlayersPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Player | null>(null);
@@ -217,6 +219,17 @@ export function PlayersPage() {
     setEditingPlayer(player);
     setIsEditorOpen(true);
   }
+
+  useEffect(() => {
+    const playerId = Number(searchParams.get("player"));
+    if (!playerId || !data.length) return;
+
+    const player = data.find((item) => item.id === playerId);
+    if (player) {
+      openEditDialog(player);
+      setSearchParams({}, { replace: true });
+    }
+  }, [data, searchParams, setSearchParams]);
 
   function submitEditor(form: PlayerForm) {
     if (editingPlayer) {

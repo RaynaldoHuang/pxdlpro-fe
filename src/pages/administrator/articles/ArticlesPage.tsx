@@ -220,14 +220,15 @@ function ArticleContentEditor({ value, onChange }: ArticleContentEditorProps) {
   ];
 
   return (
-    <div className="overflow-hidden rounded-lg border bg-background">
-      <div className="flex flex-wrap gap-1 border-b bg-muted/35 p-2">
+    <div className="overflow-hidden rounded-lg border border-neutral-200 bg-white text-black">
+      <div className="flex flex-wrap gap-1 border-b border-neutral-200 bg-white p-2">
         {tools.map((tool) => (
           <Button
             key={tool.label}
             type="button"
             variant="ghost"
             size="icon-sm"
+            className="text-black hover:bg-neutral-100 hover:text-black"
             title={tool.label}
             onClick={tool.action}
           >
@@ -241,10 +242,10 @@ function ArticleContentEditor({ value, onChange }: ArticleContentEditorProps) {
         id="article-content"
         contentEditable
         suppressContentEditableWarning
-        className="max-h-72 min-h-56 w-full overflow-y-auto px-4 py-3 text-base leading-7 outline-none [&_a]:text-[#07503d] [&_a]:underline [&_blockquote]:border-l-2 [&_blockquote]:border-[#07503d] [&_blockquote]:pl-4 [&_h2]:text-2xl [&_h2]:font-normal [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-5"
+        className="font-sans! max-h-72 min-h-56 w-full overflow-y-auto bg-white px-4 py-3 text-base leading-7 text-black caret-black outline-none [&_*]:!font-sans [&_a]:text-[#07503d] [&_a]:underline [&_blockquote]:border-l-2 [&_blockquote]:border-[#07503d] [&_blockquote]:pl-4 [&_h2]:text-2xl [&_h2]:font-normal [&_ol]:list-decimal [&_ol]:pl-5 [&_strong]:font-semibold [&_ul]:list-disc [&_ul]:pl-5"
         onInput={syncContent}
       />
-      <div className="border-t bg-muted/25 px-3 py-2 text-xs text-muted-foreground">
+      <div className="border-t border-neutral-200 bg-white px-3 py-2 text-xs text-neutral-500">
         Changes preview directly here. Supports headings, bold, italic,
         bullets, numbers, quotes, and links.
       </div>

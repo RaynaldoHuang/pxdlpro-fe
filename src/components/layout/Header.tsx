@@ -169,7 +169,10 @@ export function Header({ onOpenMobileSidebar }: HeaderProps) {
                 title,
                 description,
                 type: source.type,
-                href: source.href,
+                href:
+                  source.type === "Player" && item.id != null
+                    ? `${source.href}?player=${encodeURIComponent(String(item.id))}`
+                    : source.href,
               };
             })
             .filter((result) => result.title)

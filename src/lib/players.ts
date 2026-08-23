@@ -1,4 +1,6 @@
 import axios from "axios";
+import edu2Image from "@/assets/Edu-2.png";
+import gemmaImage from "@/assets/gemma.png";
 
 export const rankingCategoryOptions = [
   { label: "PXDL Elite", value: "pxdl_elite" },
@@ -60,11 +62,13 @@ export function getPlayerGenderLabel(value: PlayerGenderValue) {
 }
 
 export function getPlayerRankingImage(player: Player) {
+  const fallbackImage = player.gender === "women" ? gemmaImage : edu2Image;
+
   if (player.rank > 10) {
-    return player.formal_image_url || player.image_url;
+    return player.formal_image_url || player.image_url || fallbackImage;
   }
 
-  return player.image_url || player.formal_image_url || "";
+  return player.image_url || player.formal_image_url || fallbackImage;
 }
 
 export async function getPlayers(rankingCategory?: RankingCategoryValue) {

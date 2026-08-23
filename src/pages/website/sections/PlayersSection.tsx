@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 
 import {
   Select,
@@ -17,7 +16,6 @@ import {
   type Player as BackendPlayer,
   type RankingCategoryValue,
 } from "@/lib/players";
-import { rankingCategoryRoutes } from "@/routes/paths";
 
 type CarouselPlayer = {
   rank: number;
@@ -29,9 +27,6 @@ type PlayerCarouselProps = {
   players: CarouselPlayer[];
 };
 
-const rankingCategoryHrefs: Record<RankingCategoryValue, string> = {
-  ...rankingCategoryRoutes,
-};
 const rankingDisplayLimit = 10;
 
 function playerToCarouselPlayer(player: BackendPlayer): CarouselPlayer {
@@ -243,21 +238,28 @@ function PlayerCarousel({ players }: PlayerCarouselProps) {
 }
 
 export function PlayersSection() {
-  const [selectedRanking, setSelectedRanking] =
+  const [menRanking, setMenRanking] =
     useState<RankingCategoryValue>("pxdl_elite");
-  const { data } = useQuery({
-    queryKey: ["players", selectedRanking],
-    queryFn: () => getPlayers(selectedRanking),
+  const [womenRanking, setWomenRanking] =
+    useState<RankingCategoryValue>("pxdl_squad");
+  const { data: menData } = useQuery({
+    queryKey: ["players", menRanking],
+    queryFn: () => getPlayers(menRanking),
+  });
+  const { data: womenData } = useQuery({
+    queryKey: ["players", womenRanking],
+    queryFn: () => getPlayers(womenRanking),
   });
   const { activeMenPlayers, activeWomenPlayers } = useMemo(() => {
-    const activePlayers = data?.filter((player) => player.is_active) ?? [];
+    const activeMen = menData?.filter((player) => player.is_active) ?? [];
+    const activeWomen = womenData?.filter((player) => player.is_active) ?? [];
     const men = sortPlayersByRanking(
-      activePlayers.filter((player) => player.gender === "men"),
+      activeMen.filter((player) => player.gender === "men"),
     )
       .slice(0, rankingDisplayLimit)
       .map(playerToCarouselPlayer);
     const women = sortPlayersByRanking(
-      activePlayers.filter((player) => player.gender === "women"),
+      activeWomen.filter((player) => player.gender === "women"),
     )
       .slice(0, rankingDisplayLimit)
       .map(playerToCarouselPlayer);
@@ -266,7 +268,7 @@ export function PlayersSection() {
       activeMenPlayers: men,
       activeWomenPlayers: women,
     };
-  }, [data]);
+  }, [menData, womenData]);
   const hasPlayers =
     activeMenPlayers.length > 0 || activeWomenPlayers.length > 0;
 
@@ -361,27 +363,29 @@ export function PlayersSection() {
 
           <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
             <Select
-              value={selectedRanking}
+              value={menRanking}
               onValueChange={(value) =>
-                setSelectedRanking(value as RankingCategoryValue)
+                setMenRanking(value as RankingCategoryValue)
               }
             >
               <SelectTrigger
-                aria-label="Select ranking category"
-                className="h-9! w-full min-w-48 rounded-md border-0 bg-[#07503d] px-4 text-sm font-light text-white shadow-none transition-colors hover:bg-[#07503d]/95 focus-visible:ring-white/25 sm:w-52 [&_svg]:text-white/70"
+                aria-label="Select men's ranking category"
+                className="h-9! w-full min-w-48 rounded-md border-0 bg-[#07503d] px-4 text-sm font-light text-white shadow-none hover:bg-[#07503d]/95 focus-visible:ring-white/25 sm:w-52 [&_svg]:text-white/70"
               >
-                <SelectValue />
+                <span>Men · <SelectValue /></span>
               </SelectTrigger>
               <SelectContent
-                align="start"
                 position="popper"
-                className="min-w-52 rounded-md border-0 bg-[#07503d] p-1.5 text-left text-white shadow-none"
+                side="bottom"
+                align="start"
+                sideOffset={6}
+                className="min-w-52 rounded-md border-0 bg-[#07503d] p-1.5 text-white shadow-none"
               >
                 {rankingCategoryOptions.map((category) => (
                   <SelectItem
                     key={category.value}
                     value={category.value}
-                    className="h-11 justify-start rounded-sm py-0 pl-4 pr-10 text-left text-sm font-light text-white/80 focus:bg-white/12 focus:text-white data-[state=checked]:bg-white/14 data-[state=checked]:text-white [&>span:first-child]:right-4"
+                    className="h-11 rounded-sm pl-4 pr-10 text-sm font-light text-white/80 focus:bg-white/12 focus:text-white data-[state=checked]:bg-white/14 data-[state=checked]:text-white"
                   >
                     {category.label}
                   </SelectItem>
@@ -389,17 +393,41 @@ export function PlayersSection() {
               </SelectContent>
             </Select>
 
-            <Link
-              to={rankingCategoryHrefs[selectedRanking]}
-              className="hidden h-9 w-full min-w-32 items-center justify-center rounded-md bg-[#07503d] px-4 text-sm font-light text-white shadow-none transition-colors hover:bg-[#07503d]/95 sm:inline-flex sm:w-auto"
+            <Select
+              value={womenRanking}
+              onValueChange={(value) =>
+                setWomenRanking(value as RankingCategoryValue)
+              }
             >
-              View all
-            </Link>
+              <SelectTrigger
+                aria-label="Select women's ranking category"
+                className="h-9! w-full min-w-52 rounded-md border-0 bg-[#07503d] px-4 text-sm font-light text-white shadow-none hover:bg-[#07503d]/95 focus-visible:ring-white/25 sm:w-56 [&_svg]:text-white/70"
+              >
+                <span>Women · <SelectValue /></span>
+              </SelectTrigger>
+              <SelectContent
+                position="popper"
+                side="bottom"
+                align="start"
+                sideOffset={6}
+                className="min-w-56 rounded-md border-0 bg-[#07503d] p-1.5 text-white shadow-none"
+              >
+                {rankingCategoryOptions.map((category) => (
+                  <SelectItem
+                    key={category.value}
+                    value={category.value}
+                    className="h-11 rounded-sm pl-4 pr-10 text-sm font-light text-white/80 focus:bg-white/12 focus:text-white data-[state=checked]:bg-white/14 data-[state=checked]:text-white"
+                  >
+                    {category.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
         {hasPlayers ? (
-          <div key={selectedRanking} className="grid gap-3 lg:grid-cols-2">
+          <div className="grid gap-3 lg:grid-cols-2">
             {activeMenPlayers.length > 0 && (
               <PlayerCarousel players={activeMenPlayers} />
             )}
@@ -413,12 +441,6 @@ export function PlayersSection() {
           </div>
         )}
 
-        <Link
-          to={rankingCategoryHrefs[selectedRanking]}
-          className="inline-flex h-9 w-full items-center justify-center rounded-md bg-[#07503d] px-4 text-sm font-light text-white shadow-none transition-colors hover:bg-[#07503d]/95 sm:hidden"
-        >
-          View all
-        </Link>
       </div>
     </section>
   );

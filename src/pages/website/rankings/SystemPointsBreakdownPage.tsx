@@ -8,7 +8,7 @@ const weeklyProgramSchedule = [
         points: ["No Registration Points", "Win Game: 100 pts"],
       },
       {
-        name: "PXDL Linu",
+        name: "PXDL subuh",
         time: "17.00-20.00",
         points: ["Registration: 25 pts"],
       },
@@ -47,7 +47,7 @@ const weeklyProgramSchedule = [
     day: "Wednesday",
     programs: [
       {
-        name: "PXDL Linu",
+        name: "PXDL subuh",
         time: "06.00-08.00",
         points: ["Registration: 25 pts"],
       },
@@ -112,7 +112,7 @@ const weeklyProgramSchedule = [
     day: "Saturday",
     programs: [
       {
-        name: "PXDL Linu",
+        name: "PXDL subuh",
         time: "06.00-08.00",
         points: ["Registration: 25 pts"],
       },
