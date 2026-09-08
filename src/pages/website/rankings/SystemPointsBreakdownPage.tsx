@@ -10,7 +10,11 @@ const weeklyProgramSchedule = [
       {
         name: "PXDL subuh",
         time: "17.00-20.00",
-        points: ["Registration: 25 pts"],
+        points: [
+          "Registration: 25 pts",
+          "Runner-up: +25 pts",
+          "Champion: +25 pts",
+        ],
       },
       {
         name: "Open Fixed Reclub",
@@ -49,7 +53,11 @@ const weeklyProgramSchedule = [
       {
         name: "PXDL subuh",
         time: "06.00-08.00",
-        points: ["Registration: 25 pts"],
+        points: [
+          "Registration: 25 pts",
+          "Runner-up: +25 pts",
+          "Champion: +25 pts",
+        ],
       },
       {
         name: "PXDL Elite",
@@ -114,7 +122,11 @@ const weeklyProgramSchedule = [
       {
         name: "PXDL subuh",
         time: "06.00-08.00",
-        points: ["Registration: 25 pts"],
+        points: [
+          "Registration: 25 pts",
+          "Runner-up: +25 pts",
+          "Champion: +25 pts",
+        ],
       },
       {
         name: "PXDL Morning",
@@ -142,6 +154,13 @@ const weeklyProgramSchedule = [
         points: ["No Registration Points", "Win Game: 100 pts"],
       },
     ],
+  },
+] as const;
+
+const additionalProgramPoints = [
+  {
+    name: "PXDL Friendly Match",
+    points: ["Registration: 50 pts", "Win Match: 75 pts/match"],
   },
 ] as const;
 
@@ -579,6 +598,20 @@ export function SystemPointsBreakdownPage() {
           <p className="mt-6 text-sm font-light leading-7 sm:text-base">
             Each PXDL program has its own point structure.
           </p>
+          <div className="mt-7 grid gap-4 sm:grid-cols-2">
+            {additionalProgramPoints.map((program) => (
+              <div key={program.name} className="border border-white/12 p-5 sm:p-6">
+                <h3 className="text-lg font-normal text-white sm:text-xl">
+                  {program.name}
+                </h3>
+                <ul className="mt-4 list-disc space-y-2 pl-5 text-sm font-light leading-7 sm:text-base">
+                  {program.points.map((point) => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
