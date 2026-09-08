@@ -1,12 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
-import {
-  Edit3,
-  ImageIcon,
-  Loader2,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { Edit3, ImageIcon, Loader2, Plus, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -71,6 +65,8 @@ type PlayerForm = {
   is_active: boolean;
 };
 
+type PointOperation = "add" | "deduct";
+
 type ApiErrorResponse = {
   message?: string;
   errors?: Record<string, string[]>;
@@ -114,13 +110,19 @@ function formToPayload(form: PlayerForm): PlayerPayload {
   };
 }
 
-function additionalPointsToPayload(
+function adjustedPointsToPayload(
   form: PlayerForm,
   currentPoints: number,
+  operation: PointOperation,
 ): PlayerPayload {
+  const adjustment = Number(form.points);
+
   return {
     ...formToPayload(form),
-    points: currentPoints + Number(form.points),
+    points:
+      operation === "deduct"
+        ? currentPoints - adjustment
+        : currentPoints + adjustment,
   };
 }
 
@@ -144,7 +146,11 @@ export function PlayersPage() {
   const [categoryFilter, setCategoryFilter] =
     useState<RankingCategoryValue>("pxdl_elite");
   const [genderFilter, setGenderFilter] = useState<PlayerGenderValue>("men");
-  const { data = [], isLoading, isError } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["admin-players"],
     queryFn: getAdminPlayers,
   });
@@ -231,9 +237,13 @@ export function PlayersPage() {
     }
   }, [data, searchParams, setSearchParams]);
 
-  function submitEditor(form: PlayerForm) {
+  function submitEditor(form: PlayerForm, pointOperation: PointOperation) {
     if (editingPlayer) {
-      const payload = additionalPointsToPayload(form, editingPlayer.points);
+      const payload = adjustedPointsToPayload(
+        form,
+        editingPlayer.points,
+        pointOperation,
+      );
 
       updateMutation.mutate({ id: editingPlayer.id, player: payload });
       return;
@@ -406,9 +416,7 @@ export function PlayersPage() {
                   <TableCell>
                     <Badge
                       className={
-                        player.is_active
-                          ? "bg-[#07503d] text-white"
-                          : undefined
+                        player.is_active ? "bg-[#07503d] text-white" : undefined
                       }
                       variant={player.is_active ? "default" : "outline"}
                     >
@@ -512,7 +520,7 @@ type PlayerDialogProps = {
   defaultCategory: RankingCategoryValue;
   defaultGender: PlayerGenderValue;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (form: PlayerForm) => void;
+  onSubmit: (form: PlayerForm, pointOperation: PointOperation) => void;
 };
 
 function PlayerDialog({
@@ -532,13 +540,18 @@ function PlayerDialog({
   const [uploadingFileName, setUploadingFileName] = useState<string | null>(
     null,
   );
+  const [pointOperation, setPointOperation] = useState<PointOperation>("add");
   const currentPoints = player?.points ?? 0;
   const inputPoints = Number(form.points);
   const safeInputPoints = Number.isFinite(inputPoints) ? inputPoints : 0;
-  const previewTotalPoints = currentPoints + safeInputPoints;
+  const previewTotalPoints =
+    pointOperation === "deduct"
+      ? currentPoints - safeInputPoints
+      : currentPoints + safeInputPoints;
 
   useEffect(() => {
     if (open) {
+      setPointOperation("add");
       setForm({
         ...playerToForm(player),
         points: player ? "0" : playerToForm(player).points,
@@ -563,7 +576,12 @@ function PlayerDialog({
       return;
     }
 
-    onSubmit(form);
+    if (player && pointOperation === "deduct" && previewTotalPoints < 0) {
+      toast.error("Pengurangan points tidak boleh melebihi points saat ini.");
+      return;
+    }
+
+    onSubmit(form, pointOperation);
   }
 
   async function handleImageUpload(
@@ -604,9 +622,7 @@ function PlayerDialog({
         >
           <div className="min-w-0 px-4 pt-4">
             <DialogHeader>
-              <DialogTitle>
-                {player ? "Edit player" : "Add player"}
-              </DialogTitle>
+              <DialogTitle>{player ? "Edit player" : "Add player"}</DialogTitle>
               <DialogDescription>
                 Data ini akan tampil di carousel Players website publik.
               </DialogDescription>
@@ -638,21 +654,59 @@ function PlayerDialog({
               }
             />
 
-            <div className="grid min-w-0 gap-4 sm:grid-cols-[140px_minmax(0,1fr)]">
+            <div className="grid min-w-0 gap-4 sm:grid-cols-[minmax(220px,280px)_minmax(0,1fr)]">
               <div className="min-w-0 space-y-2">
                 <Label htmlFor="player-points">
-                  {player ? "Tambah points" : "Points"}
+                  {player ? "Penyesuaian points" : "Points"}
                 </Label>
-                <Input
-                  id="player-points"
-                  type="number"
-                  min={0}
-                  value={form.points}
-                  onChange={(event) =>
-                    updateField("points", event.target.value)
-                  }
-                  required
-                />
+                {player ? (
+                  <div className="grid grid-cols-[110px_minmax(0,1fr)] gap-2">
+                    <Select
+                      value={pointOperation}
+                      onValueChange={(value) =>
+                        setPointOperation(value as PointOperation)
+                      }
+                    >
+                      <SelectTrigger
+                        className="w-full"
+                        aria-label="Operasi points"
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="add">Tambah</SelectItem>
+                        <SelectItem value="deduct">Kurangi</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      id="player-points"
+                      type="number"
+                      min={0}
+                      max={
+                        pointOperation === "deduct"
+                          ? currentPoints
+                          : 999999 - currentPoints
+                      }
+                      value={form.points}
+                      onChange={(event) =>
+                        updateField("points", event.target.value)
+                      }
+                      required
+                    />
+                  </div>
+                ) : (
+                  <Input
+                    id="player-points"
+                    type="number"
+                    min={0}
+                    max={999999}
+                    value={form.points}
+                    onChange={(event) =>
+                      updateField("points", event.target.value)
+                    }
+                    required
+                  />
+                )}
                 {player && (
                   <p className="text-xs text-muted-foreground">
                     Saat ini {currentPoints.toLocaleString("id-ID")} points.

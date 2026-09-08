@@ -462,8 +462,8 @@ export function SystemPointsBreakdownPage() {
           <p className="mt-6 text-sm font-light leading-7 sm:text-base">
             The PXDL PRO Ranking System rewards players for participating in
             official PXDL sessions, winning matches, achieving tournament
-            milestones, and completing host-assigned challenge matches.  Every point contributes to your position on the PXDL PRO
-            leaderboard.
+            milestones, and completing host-assigned challenge matches. Every
+            point contributes to your position on the PXDL PRO leaderboard.
           </p>
         </div>
       </section>
@@ -471,7 +471,7 @@ export function SystemPointsBreakdownPage() {
       <section className="px-5 pb-14 sm:px-8 sm:pb-18 lg:px-12">
         <div className="mx-auto max-w-7xl text-white/68">
           <h2 className="text-2xl font-normal leading-tight text-white sm:text-3xl">
-            How the Ranking System Works 
+            How the Ranking System Works
           </h2>
           <p className="mt-6 text-sm font-light leading-7 sm:text-base">
             Players can earn ranking points through three main activities:
@@ -499,6 +499,65 @@ export function SystemPointsBreakdownPage() {
       <section className="px-5 pb-14 sm:px-8 sm:pb-18 lg:px-12">
         <div className="mx-auto max-w-7xl text-white/68">
           <h2 className="text-2xl font-normal leading-tight text-white sm:text-3xl">
+            Ranking Tier Promotion & Retention
+          </h2>
+          <p className="mt-6 max-w-4xl text-sm font-light leading-7 sm:text-base">
+            Players move up when they reach the required total points. Squad and
+            Elite status are reviewed every three months, and players must meet
+            the minimum points for that review period to remain in their tier.
+          </p>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-2">
+            <div className="border border-white/12 p-5 sm:p-6">
+              <h3 className="text-lg font-normal text-white sm:text-xl">
+                Promotion thresholds
+              </h3>
+              <dl className="mt-5 space-y-4 text-sm sm:text-base">
+                <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+                  <dt>PXDL Member to PXDL Squad</dt>
+                  <dd className="shrink-0 font-semibold text-white">
+                    7,000 pts
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <dt>PXDL Squad to PXDL Elite</dt>
+                  <dd className="shrink-0 font-semibold text-white">
+                    15,000 pts
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div className="border border-white/12 p-5 sm:p-6">
+              <h3 className="text-lg font-normal text-white sm:text-xl">
+                Three-month retention requirements
+              </h3>
+              <dl className="mt-5 space-y-4 text-sm sm:text-base">
+                <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4">
+                  <dt>Minimum to remain in PXDL Squad</dt>
+                  <dd className="shrink-0 font-semibold text-white">
+                    2,500 pts
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <dt>Minimum to remain in PXDL Elite</dt>
+                  <dd className="shrink-0 font-semibold text-white">
+                    5,000 pts
+                  </dd>
+                </div>
+              </dl>
+              <p className="mt-5 text-xs font-light leading-6 text-white/55 sm:text-sm">
+                Players who do not meet the minimum during a three-month review
+                period may be moved to the tier below.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 pb-14 sm:px-8 sm:pb-18 lg:px-12">
+        <div className="mx-auto max-w-7xl text-white/68">
+          <h2 className="text-2xl font-normal leading-tight text-white sm:text-3xl">
             1. Weekly Program Points
           </h2>
           <p className="mt-6 text-sm font-light leading-7 sm:text-base">
@@ -511,18 +570,10 @@ export function SystemPointsBreakdownPage() {
             <li className="border-b border-white/10 pb-2">
               Registration points
             </li>
-            <li className="border-b border-white/10 pb-2">
-              Match-win points
-            </li>
-            <li className="border-b border-white/10 pb-2">
-              Placement bonuses
-            </li>
-            <li className="border-b border-white/10 pb-2">
-              Semifinal points
-            </li>
-            <li className="border-b border-white/10 pb-2">
-              Runner-up points
-            </li>
+            <li className="border-b border-white/10 pb-2">Match-win points</li>
+            <li className="border-b border-white/10 pb-2">Placement bonuses</li>
+            <li className="border-b border-white/10 pb-2">Semifinal points</li>
+            <li className="border-b border-white/10 pb-2">Runner-up points</li>
             <li className="border-b border-white/10 pb-2">Champion points</li>
           </ul>
           <p className="mt-6 text-sm font-light leading-7 sm:text-base">
@@ -595,11 +646,11 @@ export function SystemPointsBreakdownPage() {
           </h2>
           <p className="mt-6 text-sm font-light leading-7 sm:text-base">
             Challenge Matches are special matches arranged by the host during
-            selected PXDL Squad and PXDL Women Fixed sessions. Challenge Points are awarded only to the winning pair. The number of
-            points earned depends on the combination of player classifications in
-            the match.
+            selected PXDL Squad and PXDL Women Fixed sessions. Challenge Points
+            are awarded only to the winning pair. The number of points earned
+            depends on the combination of player classifications in the match.
           </p>
-      
+
           <div className="mt-6 overflow-x-auto pb-2 [scrollbar-color:rgba(255,255,255,0.28)_transparent] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/25">
             <table className="w-full min-w-[640px] border-collapse sm:min-w-[720px] border border-white/18 text-left">
               <thead>
@@ -632,10 +683,7 @@ export function SystemPointsBreakdownPage() {
 
           <div className="mt-6 flex flex-col gap-3 text-base font-normal text-white sm:flex-row sm:flex-wrap sm:gap-x-12">
             {classificationLegend.map((item) => (
-              <div
-                key={item.code}
-                className="whitespace-nowrap"
-              >
+              <div key={item.code} className="whitespace-nowrap">
                 {item.code} : {item.label}
               </div>
             ))}
@@ -669,18 +717,16 @@ export function SystemPointsBreakdownPage() {
             Tournament points are determined by:
           </p>
           <ul className="mt-6 grid gap-2 text-sm font-light leading-7 sm:text-base">
-            <li className="border-b border-white/10 pb-2">
-              Tournament class
-            </li>
-            <li className="border-b border-white/10 pb-2">
-              Player category
-            </li>
+            <li className="border-b border-white/10 pb-2">Tournament class</li>
+            <li className="border-b border-white/10 pb-2">Player category</li>
             <li className="border-b border-white/10 pb-2">
               Final achievement or finishing stage
             </li>
           </ul>
           <p className="mt-6 text-sm font-light leading-7 sm:text-base">
-            Every tournament participant also receives Welcome Points based on the tournament class. Tournament classes use 0.5x, 1x, 2x, and 4x multipliers, with Welcome Points ranging from 100 to 800 points.
+            Every tournament participant also receives Welcome Points based on
+            the tournament class. Tournament classes use 0.5x, 1x, 2x, and 4x
+            multipliers, with Welcome Points ranging from 100 to 800 points.
           </p>
 
           <div className="mt-6 overflow-x-auto pb-2 [scrollbar-color:rgba(255,255,255,0.28)_transparent] [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/25">
@@ -722,8 +768,7 @@ export function SystemPointsBreakdownPage() {
             </h3>
             <p className="mt-5 text-sm font-light leading-7 sm:text-base">
               <strong className="font-normal text-white">Multiplier:</strong>{" "}
-              0.5x{" "}
-              <span className="mx-2 text-white/35">|</span>
+              0.5x <span className="mx-2 text-white/35">|</span>
               <strong className="font-normal text-white">
                 Welcome Points:
               </strong>{" "}
@@ -779,8 +824,7 @@ export function SystemPointsBreakdownPage() {
               Big Local Tournament
             </h3>
             <p className="mt-5 text-sm font-light leading-7 sm:text-base">
-              <strong className="font-normal text-white">Multiplier:</strong>{" "}
-              1x{" "}
+              <strong className="font-normal text-white">Multiplier:</strong> 1x{" "}
               <span className="mx-2 text-white/35">|</span>
               <strong className="font-normal text-white">
                 Welcome Points:
@@ -837,8 +881,8 @@ export function SystemPointsBreakdownPage() {
               National Tournament
             </h3>
             <p className="mt-5 text-sm font-light leading-7 sm:text-base">
-              <strong className="font-normal text-white">Multiplier:</strong>{" "}
-              2x <span className="mx-2 text-white/35">|</span>
+              <strong className="font-normal text-white">Multiplier:</strong> 2x{" "}
+              <span className="mx-2 text-white/35">|</span>
               <strong className="font-normal text-white">
                 Welcome Points:
               </strong>{" "}
@@ -894,8 +938,8 @@ export function SystemPointsBreakdownPage() {
               International Tournament
             </h3>
             <p className="mt-5 text-sm font-light leading-7 sm:text-base">
-              <strong className="font-normal text-white">Multiplier:</strong>{" "}
-              4x <span className="mx-2 text-white/35">|</span>
+              <strong className="font-normal text-white">Multiplier:</strong> 4x{" "}
+              <span className="mx-2 text-white/35">|</span>
               <strong className="font-normal text-white">
                 Welcome Points:
               </strong>{" "}
