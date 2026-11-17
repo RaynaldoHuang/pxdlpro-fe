@@ -127,7 +127,7 @@ export async function uploadHeroMedia(file: File) {
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 413) {
         throw new Error(
-          "File terlalu besar untuk server saat ini. Restart backend dengan upload limit 80MB.",
+          "File terlalu besar untuk server saat ini. Restart backend dengan upload limit 100MB.",
         );
       }
 
@@ -140,7 +140,7 @@ export async function uploadHeroMedia(file: File) {
       const firstValidationError = responseData?.errors
         ? Object.values(responseData.errors).flat()[0]
         : undefined;
-      const validationMessage = responseData?.message || firstValidationError;
+      const validationMessage = firstValidationError || responseData?.message;
 
       if (validationMessage) {
         throw new Error(String(validationMessage));

@@ -560,8 +560,8 @@ function HeroSlideDialog({
       return;
     }
 
-    if (file.size > 80 * 1024 * 1024) {
-      toast.error("File maksimal 80MB.");
+    if (file.size > 100 * 1024 * 1024) {
+      toast.error("File maksimal 100MB.");
       return;
     }
 
@@ -685,7 +685,7 @@ function HeroSlideDialog({
               <AdminUploadField
                 id="hero-media-upload"
                 label="Upload local media"
-                helperText="JPG, PNG, WEBP, GIF, MP4, WEBM, MOV, M4V. Max 80MB."
+                helperText="JPG, PNG, WEBP, GIF, MP4, WEBM, MOV, M4V. Max 100MB. Video otomatis dikonversi ke WebM; tunggu hingga selesai."
                 uploadingFileName={uploadingFileName}
                 accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime,video/x-m4v"
                 previewUrl={

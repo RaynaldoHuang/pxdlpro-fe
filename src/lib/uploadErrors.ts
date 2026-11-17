@@ -10,7 +10,7 @@ type UploadErrorResponse = {
 
 export function uploadErrorMessage(error: unknown, fallback: string) {
   if (!axios.isAxiosError<UploadErrorResponse>(error)) {
-    return fallback;
+    return error instanceof Error ? error.message : fallback;
   }
 
   const data = error.response?.data;
